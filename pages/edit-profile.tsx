@@ -1,15 +1,37 @@
-'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { ButtonBack } from '@/components/button-back';
 import { ButtonSubmit } from '@/components/button-submit';
+import { useSwrProfile } from '@/hooks/use-swr-profile';
+import { useRouter } from 'next/router';
 
 export default function EditProfile() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const { isLoading, error, profile: initialProfile } = useSwrProfile();
+  const [profile, setProfile] = useState(initialProfile);
+
+  useEffect(() => {
+    if (initialProfile) setProfile(initialProfile);
+  }, [initialProfile]);
+
+  if (error) return <h1>Error...</h1>;
+  if (isLoading || !profile) return <h1>Loading...</h1>;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted');
+    await fetch('/api/profile', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profile),
+    });
+    toast.success('Profile updated successfully');
+    router.replace('/');
   };
 
   return (
@@ -20,15 +42,33 @@ export default function EditProfile() {
       <form className="mt-8 mb-3" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="firstname">User Name</Label>
-          <Input id="firstname" placeholder="Tyler" type="text" />
+          <Input
+            id="firstname"
+            placeholder="Tyler"
+            type="text"
+            value={profile.name}
+            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+          <Input
+            id="email"
+            placeholder="projectmayhem@fc.com"
+            type="email"
+            value={profile.email}
+            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-6">
           <Label htmlFor="password">Telephone</Label>
-          <Input id="password" placeholder="+1 1234 5678" type="tel" />
+          <Input
+            id="password"
+            placeholder="+1 1234 5678"
+            type="tel"
+            value={profile.phone}
+            onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+          />
         </LabelInputContainer>
 
         <ButtonSubmit />
