@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Script from 'next/script';
+import { AuroraBackground } from '@/components/ui/aurora-background';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
@@ -12,7 +13,11 @@ function MyApp({ Component, pageProps }) {
         <meta name="theme-color" content="#4F6AF5" />
       </Head>
       <Script src="__blocklet__.js" />
-      <Component {...pageProps} />
+      <AuroraBackground>
+        <div className="w-screen h-screen flex justify-center items-center z-10">
+          <Component {...pageProps} />
+        </div>
+      </AuroraBackground>
     </>
   );
 }
