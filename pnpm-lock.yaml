@@ -17,6 +17,9 @@ importers:
       '@blocklet/sdk':
         specifier: ^1.16.28
         version: 1.16.28
+      '@hookform/resolvers':
+        specifier: ^3.9.0
+        version: 3.9.0(react-hook-form@7.52.1(react@18.2.0))
       '@ocap/client':
         specifier: ^1.18.126
         version: 1.18.126
@@ -29,6 +32,9 @@ importers:
       '@radix-ui/react-label':
         specifier: ^2.1.0
         version: 2.1.0(@types/react@18.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-slot':
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@18.3.3)(react@18.2.0)
       '@tabler/icons-react':
         specifier: ^3.11.0
         version: 3.11.0(react@18.2.0)
@@ -50,6 +56,9 @@ importers:
       react-element-to-jsx-string:
         specifier: ^15.0.0
         version: 15.0.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.52.1
+        version: 7.52.1(react@18.2.0)
       react-icons:
         specifier: ^5.2.1
         version: 5.2.1(react@18.2.0)
@@ -59,6 +68,9 @@ importers:
       swr:
         specifier: ^2.2.5
         version: 2.2.5(react@18.2.0)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@types/react':
         specifier: ^18.3.3
@@ -231,6 +243,11 @@ packages:
 
   '@hapi/topo@5.1.0':
     resolution: {integrity: sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==}
+
+  '@hookform/resolvers@3.9.0':
+    resolution: {integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -2435,6 +2452,12 @@ packages:
       react: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1 || ^18.0.0
       react-dom: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1 || ^18.0.0
 
+  react-hook-form@7.52.1:
+    resolution: {integrity: sha512-uNKIhaoICJ5KQALYZ4TOaOLElyM+xipord+Ha3crEFhTntdLvWZqVY49Wqd/0GiVCA/f9NjemLeiNPjG7Hpurg==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-icons@5.2.1:
     resolution: {integrity: sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==}
     peerDependencies:
@@ -3054,6 +3077,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
   zx@8.1.4:
     resolution: {integrity: sha512-QFDYYpnzdpRiJ3dL2102Cw26FpXpWshW4QLTGxiYfIcwdAqg084jRCkK/kuP/NOSkxOjydRwNFG81qzA5r1a6w==}
     engines: {node: '>= 12.17.0'}
@@ -3471,6 +3497,10 @@ snapshots:
   '@hapi/topo@5.1.0':
     dependencies:
       '@hapi/hoek': 9.3.0
+
+  '@hookform/resolvers@3.9.0(react-hook-form@7.52.1(react@18.2.0))':
+    dependencies:
+      react-hook-form: 7.52.1(react@18.2.0)
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -6119,6 +6149,10 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       react-is: 18.1.0
 
+  react-hook-form@7.52.1(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+
   react-icons@5.2.1(react@18.2.0):
     dependencies:
       react: 18.2.0
@@ -6819,6 +6853,8 @@ snapshots:
   yaml@2.4.5: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@3.23.8: {}
 
   zx@8.1.4:
     optionalDependencies:

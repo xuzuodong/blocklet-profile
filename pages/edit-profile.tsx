@@ -1,35 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { ButtonBack } from '@/components/button-back';
 import { ButtonSubmit } from '@/components/button-submit';
 import { useSwrProfile } from '@/hooks/use-swr-profile';
 import { useRouter } from 'next/router';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+const schema = z.object({
+  name: z.string().min(1, { message: 'Please enter user name' }),
+  email: z.string().email('Invalid email'),
+  phone: z.string().min(1, { message: 'Please enter phone number' }),
+});
 
 export default function EditProfile() {
   const router = useRouter();
 
-  const { isLoading, error, profile: initialProfile } = useSwrProfile();
-  const [profile, setProfile] = useState(initialProfile);
+  const { isLoading, error, profile: initialProfile, mutate } = useSwrProfile();
+
+  const form = useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) });
 
   useEffect(() => {
-    if (initialProfile) setProfile(initialProfile);
+    if (initialProfile) {
+      form.setValue('name', initialProfile.name);
+      form.setValue('email', initialProfile.email);
+      form.setValue('phone', initialProfile.phone);
+    }
   }, [initialProfile]);
 
   if (error) return <h1>Error...</h1>;
-  if (isLoading || !profile) return <h1>Loading...</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (data: z.infer<typeof schema>) => {
     await fetch('/api/profile', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(profile),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
+    mutate();
     toast.success('Profile updated successfully');
     router.replace('/');
   };
@@ -39,44 +50,52 @@ export default function EditProfile() {
       <ButtonBack></ButtonBack>
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">Edit Your Profile</h2>
 
-      <form className="mt-8 mb-3" onSubmit={handleSubmit}>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="firstname">User Name</Label>
-          <Input
-            id="firstname"
-            placeholder="Tyler"
-            type="text"
-            value={profile.name}
-            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-8 mb-3">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="mb-4">
+                <FormLabel>User Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Tyler" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
-            id="email"
-            placeholder="projectmayhem@fc.com"
-            type="email"
-            value={profile.email}
-            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-          />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-6">
-          <Label htmlFor="password">Telephone</Label>
-          <Input
-            id="password"
-            placeholder="+1 1234 5678"
-            type="tel"
-            value={profile.phone}
-            onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-          />
-        </LabelInputContainer>
 
-        <ButtonSubmit />
-      </form>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="mb-4">
+                <FormLabel>Email Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="projectmayhem@fc.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="mb-6">
+                <FormLabel>Telephone</FormLabel>
+                <FormControl>
+                  <Input placeholder="+1 1234 5678" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <ButtonSubmit disabled={form.formState.isSubmitting} />
+        </form>
+      </Form>
     </div>
   );
 }
-
-const LabelInputContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-  return <div className={cn('flex flex-col space-y-2 w-full', className)}>{children}</div>;
-};
