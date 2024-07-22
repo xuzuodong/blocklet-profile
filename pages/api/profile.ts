@@ -10,5 +10,7 @@ export default async function handler(req, res: NextApiResponse) {
   } else if (req.method === 'PUT') {
     await db.update({ key: 'profile' }, { $set: req.body }, { returnUpdatedDocs: true });
     res.status(200).send('Profile updated');
+  } else {
+    res.status(405).send('Method Not Allowed');
   }
 }
