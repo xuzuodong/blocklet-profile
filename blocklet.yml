@@ -12,7 +12,7 @@ author:
   email: hi@xzd.me
 repository:
   type: git
-  url: git+https://github.com/blocklet/create-blocklet.git
+  url: git+https://github.com/xuzuodong/blocklet-profile/tree/master
 specVersion: 1.2.8
 version: 0.1.0
 logo: logo.png
